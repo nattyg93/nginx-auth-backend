@@ -1,0 +1,40 @@
+[tool.poetry]
+name = "nginx-auth-backend"
+version = "0.0.1"
+description = "Simple auth backend for use with ngx_http_auth_request_module"
+authors = ["Nathanael Gordon <nathanael.l.gordon@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+dj-database-url = "^0.5.0"
+django = "^2.1"
+django-configurations = "^2.1"
+django-cors-headers = "^2.4"
+django-environ = "^0.4.5"
+django-extensions = "^2.1"
+gunicorn = "^19.9"
+ionata-django-settings = "^0.0.4"
+psycopg2 = "^2.7"
+
+[tool.poetry.dev-dependencies]
+autopep8 = "^1.4"
+black = "^18.9b0"
+django-debug-toolbar = "^1.11"
+faker = "^1.0"
+ipdb = "^0.11.0"
+ipython = "^7.2"
+mypy = "^0.660.0"
+ptpython = "^2.0"
+pycodestyle = "^2.4"
+pydocstyle = "^3.0"
+pylint = "^2.2"
+pylint-django = "^2.0"
+pyls-isort = "^0.1.1"
+pyls-mypy = "^0.1.5"
+python-language-server = "^0.21.4"
+rope = "^0.11.0"
+werkzeug = "^0.14.1"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
