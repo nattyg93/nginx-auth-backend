@@ -9,6 +9,8 @@ from ionata_settings import base
 class Project:
     """Settings unique to your project's base Configuration."""
 
+    DEBUG = values.BooleanValue(False)
+
     APP_NAME = "webapp"
 
     SITE_URL = values.Value(environ_required=True)
