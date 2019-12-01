@@ -20,6 +20,7 @@ class Project:
     # Storage
     DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
     STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    STATIC_ROOT = values.Value()
 
     # Auth
     SESSION_COOKIE_PATH = "/"
