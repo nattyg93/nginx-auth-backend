@@ -2,7 +2,7 @@
 from typing import Any, List
 
 from django.conf import settings
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, logout_then_login
 from django.urls import include, path
 
 from webapp.views import check_auth
@@ -21,5 +21,6 @@ def _static_urls() -> List[Any]:
 urlpatterns = [
     path("auth-login/", LoginView.as_view(), name="login"),
     path("auth-test/", check_auth, name="auth-test"),
+    path("auth-logout/", logout_then_login, name="logout"),
     path("", include(_static_urls())),
 ]
