@@ -1,14 +1,14 @@
 [Unit]
-Description=Gunicorn daemon for running auth backend for NGINX
+Description=Gunicorn daemon
 After=network.target
 
 [Service]
 Type=simple
 User=www-data
 Group=www-data
-RuntimeDirectory=nginx_auth_backend
-EnvironmentFile=/var/www/nginx-auth-backend/.env
-WorkingDirectory=/var/www/nginx-auth-backend
+RuntimeDirectory=gunicorn
+EnvironmentFile=/var/www/.env
+WorkingDirectory=/var/www
 ExecStart=/usr/local/bin/poetry run gunicorn \
   webapp.wsgi:application \
   --access-logfile=- \
@@ -16,7 +16,9 @@ ExecStart=/usr/local/bin/poetry run gunicorn \
   --log-level=error \
   --max-requests=500 \
   --workers=2 \
-  --bind=unix:/var/run/nginx_auth_backend/gunicorn.socket
+  --threads=3 \
+  --bind=unix:/var/run/gunicorn/gunicorn.socket
+ExecReload=/bin/kill -s HUP $MAINPID
 
 [Install]
 WantedBy=multi-user.target
