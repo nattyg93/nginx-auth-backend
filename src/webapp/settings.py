@@ -63,6 +63,12 @@ CELERY_BROKER_URL = env("CELERY_BROKER_URL")
 CELERY_TASK_DEFAULT_QUEUE = env.str("CELERY_TASK_DEFAULT_QUEUE")
 DATABASES = {"default": env.db_url(default=default_databse_url)}
 
+# Storage
+DEFAULT_FILE_STORAGE = "webapp.storage.MediaS3"
+STATICFILES_STORAGE = "webapp.storage.StaticS3"
+
+AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
+AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 
 INSTALLED_APPS = [
     # Project apps
@@ -130,7 +136,6 @@ AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
-AUTH_USER_MODEL = "auth.User"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
@@ -211,7 +216,7 @@ LOGIN_REDIRECT_URL = "/backend/api/v1/"
 INSTALLED_APPS += [
     "rest_framework",
     "rest_framework.authtoken",
-    "rest_auth",
+    "dj_rest_auth",
     "allauth",
     "django_filters",
 ]
@@ -262,8 +267,16 @@ REST_AUTH_SERIALIZERS = {
 
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
-    ADMINS = [("Nat Gordon", "nathanael.l.gordon@gmail.com")]
+    ADMINS = [("Nat Gordon", "nat@nattyg93.com")]
     MANAGERS = ADMINS
+
+    # Storage
+    AWS_S3_REGION_NAME = ""
+    AWS_S3_ENDPOINT_URL = "http://minio:9000"
+    AWS_ACCESS_KEY_ID = "djangos3"
+    AWS_SECRET_ACCESS_KEY = "djangos3"
+    AWS_S3_SECURE_URLS = url.scheme == "https"
+    AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default=url.netloc)
 
     # Security
     CORS_ORIGIN_ALLOW_ALL = True

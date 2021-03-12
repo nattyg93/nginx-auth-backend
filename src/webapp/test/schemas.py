@@ -133,7 +133,7 @@ class JsonApiSchema(metaclass=SchemaBase):
 
     @classmethod
     # pylint: disable=redefined-builtin,invalid-name
-    def get_data(cls, id: Optional[Any] = None, **kwargs,) -> Dict[str, Any]:
+    def get_data(cls, id: Optional[Any] = None, **kwargs) -> Dict[str, Any]:
         """Return JSON:API compatible payload."""
         data = cls.get_id(resource_name=cls.resource_name, id=id)
         attributes = {}
@@ -164,8 +164,8 @@ class JsonApiSchema(metaclass=SchemaBase):
                 if isinstance(include, str):
                     try:
                         matcher = import_string(matcher)
-                    except ImportError:
-                        raise ImproperlyConfigured(exception_msg)
+                    except ImportError as error:
+                        raise ImproperlyConfigured(exception_msg) from error
                 if not isinstance(matcher, Matcher):
                     if hasattr(matcher, "get_matcher"):
                         matcher = matcher.get_matcher(as_document=False)

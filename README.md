@@ -1,24 +1,6 @@
 # Nginx Auth Backend
 
 
-## Base Django project
-
-Docker image for the backend is from https://gitlab.com/ionata/django-images
-
-If you don't have access, it's basically:
-
-* Ubuntu 16.04
-* Install build tools:
-  `build-essential`, `g++-5`, `gettext`, `git`, `libjpeg-dev`, `locales`, `zlib1g-dev`
-* Install postgis requirements
-  `binutils`, `gdal-bin`, `libpq-dev`, `libproj-dev`, `libgeos-dev`, `postgis`, `postgresql-client`
-* Install mssql requirements
-  `msodbcsql`, `mssql-tools`, `unixodbc-dev`
-* Install wkhtmltopdf+libfontconfig
-* Install python3.7+poetry
-* Install nginx
-
-
 ## Dotenv
 * Copy example.env to .env:
   - `cp example.env .env`

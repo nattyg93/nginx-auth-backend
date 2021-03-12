@@ -1,13 +1,12 @@
 """Project wide base test class."""
 from typing import Any, Dict, Optional, Tuple, Type
 
-from django.core.exceptions import ImproperlyConfigured
+from django.contrib.auth.models import User  # pylint: disable=imported-auth-user
 from django.core.management import call_command
 from hamcrest import assert_that
-from hamcrest.core.base_matcher import BaseMatcher  # type: ignore
+from hamcrest.core.base_matcher import BaseMatcher
 from rest_framework import status, test
 
-from users.models import User
 from webapp.test.schemas import JsonApiSchema
 
 
@@ -137,24 +136,7 @@ class BaseTestCase(test.APITestCase):
 class JsonApiTestCase(BaseTestCase):
     """Add shortcuts for authentication tasks."""
 
-    # We provide a default here to work around an issue
-    # preventing pylint from resolving defaultless
-    # instance variables on subclasses.
-    # https://github.com/PyCQA/pylint/issues/3167
-    schema: Type[JsonApiSchema] = None  # type: ignore
-
-    def __init__(self, *args, **kwargs):
-        """Set initial value of current_user and current_token."""
-        super().__init__(*args, **kwargs)
-        if getattr(self, "schema", None) is None:
-            raise ImproperlyConfigured(
-                "`schema` must be overridden in"
-                " JsonApiTestCase subclass:"
-                f"`{self.__class__.__module__}.{self.__class__.__name__}`"
-                "\n\ne.g.:"
-                f"\n\nclass {self.__class__.__name__}(JsonApiTestCase):"
-                "\n\n    schema = JsonApiSchemaSubClass"
-            )
+    schema: Type[JsonApiSchema]
 
     @property
     def resource_name(self):
