@@ -1,5 +1,5 @@
 version: "3"
-volumes: { home, db, minio1, minio2, redis, venv }
+volumes: { home, db, redis, venv }
 networks: { default }
 services:
   db:
@@ -11,19 +11,12 @@ services:
     image: "redis:3.2-alpine"
     volumes: ["redis:/data"]
     ports: ["6379:6379"]
-  minio:
-    command: "server /export"
-    environment: ["MINIO_ACCESS_KEY=djangos3", "MINIO_SECRET_KEY=djangos3"]
-    image: "minio/minio"
-    volumes: ["minio1:/export", "minio2:/root/.config"]
-    networks: { default: { aliases: ["minio", "min.io"] } }
-    ports: ["9000:9000"]
   backend: &backend
     build:
       context: .
       dockerfile: "conf/docker/Dockerfile"
     command: "poetry run django-admin runserver_plus 0.0.0.0:8000 --nopin"
-    depends_on: ["db", "minio", "redis"]
+    depends_on: ["db", "redis"]
     env_file: ".env"
     environment:
       PYTHONPATH: "/var/www/src"

@@ -5,11 +5,8 @@ from urllib.parse import urlparse
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
-from django.core.files.storage import default_storage
 from django.core.management.base import BaseCommand
 from django.db.utils import IntegrityError
-
-from webapp.storage import MediaS3
 
 
 def get_admin():
@@ -40,26 +37,6 @@ def get_site():
     defaults = {"name": settings.PROJECT_NAME, "domain": url.hostname}
     kwargs = {"pk": settings.SITE_ID, "defaults": defaults}
     return Site.objects.get_or_create(**kwargs)[0]
-
-
-def configure_bucket(policy_path: str):
-    """Configure the storage bucket."""
-    if not isinstance(default_storage, MediaS3):
-        return
-    ensure_bucket_exists(default_storage)
-    create_bucket_policy(default_storage, policy_path)
-
-
-def ensure_bucket_exists(storage: MediaS3):
-    """Ensure the bucket exists."""
-    storage.create_bucket()
-
-
-def create_bucket_policy(storage: MediaS3, policy_path: str):
-    """Create a bucket policy."""
-    with open(policy_path) as fyl:
-        policy = fyl.read()
-        storage.bucket.Policy().put(Policy=policy)
 
 
 class Verbosity(Enum):
@@ -110,37 +87,9 @@ class Command(BaseCommand):
                 output = style(message)
             self.stdout.write(output)
 
-    def add_arguments(self, parser):
-        """Add bucket-policy argument."""
-        default_path = "/var/www/conf/docker/bucket_policy.json"
-        parser.add_argument(
-            "--bucket-policy",
-            default=default_path,
-            help=(
-                "The path to the json file that should be used to create "
-                "the bucket policy. (Only available when settings.DEBUG "
-                f"is True and using minio.) Default: {default_path}"
-            ),
-        )
-
     def handle(self, *args, **options):
         """Run the management command."""
         self.verbosity = Verbosity(options["verbosity"])
         self._log(f"Running setup for {settings.PROJECT_NAME}", style=self.style.NOTICE)
-        bucket_policy = options["bucket_policy"]
         get_admin()
         get_site()
-        is_minio = "minio" in getattr(settings, "AWS_S3_ENDPOINT_URL", "")
-        if settings.DEBUG and is_minio:
-            configure_bucket(bucket_policy)
-        elif not settings.DEBUG:
-            self._log(
-                "Skipping creating bucket policy since settings.DEBUG is False",
-                style=self.style.NOTICE,
-            )
-        elif not is_minio:
-            self._log(
-                "Skipping creating bucket policy since "
-                'settings.AWS_S3_ENDPOINT_URL does not contain "minio"',
-                style=self.style.NOTICE,
-            )

@@ -30,8 +30,6 @@ if DEBUG:
         **{
             "CELERY_BROKER_URL": (str, "redis://redis/0"),
             "ADMIN_USER": (dict, {"email": "test@example.com", "password": "password"}),
-            "AWS_STORAGE_BUCKET_NAME": (str, "django"),
-            "AWS_S3_REGION_NAME": (str, ""),
             "MAILGUN_API_KEY": (str, ""),
             "CELERY_TASK_DEFAULT_QUEUE": (str, "celery"),
             "AXES_KEY_PREFIX": (str, "axes"),
@@ -67,11 +65,8 @@ CELERY_TASK_DEFAULT_QUEUE = env.str("CELERY_TASK_DEFAULT_QUEUE")
 DATABASES = {"default": env.db_url(default=default_databse_url)}
 
 # Storage
-DEFAULT_FILE_STORAGE = "webapp.storage.MediaS3"
-STATICFILES_STORAGE = "webapp.storage.StaticS3"
-
-AWS_S3_REGION_NAME = env("AWS_S3_REGION_NAME")
-AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
 
 INSTALLED_APPS = [
     # Project apps
@@ -236,9 +231,6 @@ INTERNAL_IPS = ["127.0.0.1"]
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-AWS_AUTO_CREATE_BUCKET = False
-AWS_DEFAULT_ACL = "private"
-AWS_BUCKET_ACL = "private"
 
 # Files
 project_root = Path(__file__).parents[2]
@@ -353,14 +345,6 @@ if DEBUG:
     ALLOWED_HOSTS = ["*"]
     ADMINS = [("Nat Gordon", "nat@nattyg93.com")]
     MANAGERS = ADMINS
-
-    # Storage
-    AWS_S3_REGION_NAME = ""
-    AWS_S3_ENDPOINT_URL = "http://minio:9000"
-    AWS_ACCESS_KEY_ID = "djangos3"
-    AWS_SECRET_ACCESS_KEY = "djangos3"
-    AWS_S3_SECURE_URLS = url.scheme == "https"
-    AWS_S3_CUSTOM_DOMAIN = env("AWS_S3_CUSTOM_DOMAIN", default=url.netloc)
 
     # Security
     CORS_ORIGIN_ALLOW_ALL = True
