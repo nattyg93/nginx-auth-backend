@@ -26,6 +26,7 @@ RUN apt update && \
     libpq-dev \
     postgresql-client \
     mysql-client \
+    xmlsec1 \
     curl \
     # Cleaning cache:
     && apt autoremove -y && apt clean -y && rm -rf /var/lib/apt/lists/*

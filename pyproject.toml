@@ -23,6 +23,7 @@ django-storages = {version = "^1.11.1", extras = ["boto3"]}
 djangorestframework = "~=3.10.3" # does not follow semver
 djangorestframework-filters = ">=1.0.0.dev0"
 djangorestframework-jsonapi = "^3.1"
+djangosaml2 = "^1.1.0"
 gunicorn = "^19.9"
 psycopg2-binary = "^2.8.6"
 python-dateutil = "^2.8"

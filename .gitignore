@@ -72,3 +72,8 @@ celerybeat-schedule*
 .-rplugin~
 .ssh*
 .env
+
+# Certificates #
+################
+private.key
+public.pem

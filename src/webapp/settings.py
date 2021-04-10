@@ -1,9 +1,12 @@
 """Settings for your application."""
+import os.path
 from datetime import timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Tuple, Type
 from urllib.parse import urlparse
 
+import saml2
+import saml2.saml
 from environ import Env
 
 env = Env()
@@ -73,6 +76,8 @@ AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
 INSTALLED_APPS = [
     # Project apps
     "webapp.apps.WebAppConfig",
+    # 3rd party
+    "djangosaml2",
     # Our defaults
     "corsheaders",
     "django_extensions",
@@ -91,6 +96,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "djangosaml2.middleware.SamlSessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -135,6 +141,7 @@ ANONYMOUS_USER_ID = -1
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesBackend",
     "django.contrib.auth.backends.ModelBackend",
+    "djangosaml2.backends.Saml2Backend",
 ]
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -144,6 +151,85 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+LOGIN_URL = "saml2_login"
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
+# SAML
+SAML_ROOT_PATH = "saml"
+SAML_DEFAULT_BINDING = saml2.BINDING_HTTP_POST
+SAML_LOGOUT_REQUEST_PREFERRED_BINDING = saml2.BINDING_HTTP_POST
+SAML_IGNORE_LOGOUT_ERRORS = True
+IDP_URL = env("IDP_URL")
+IDP_METADATA_PATH = env(
+    "IDP_METADATA_PATH", default="/auth/realms/master/protocol/saml/descriptor"
+)
+SAML_DJANGO_USER_MAIN_ATTRIBUTE = "username"
+SAML_DJANGO_USER_MAIN_ATTRIBUTE_LOOKUP = "__iexact"
+SAML_ATTRIBUTE_MAPPING = {
+    "username": ("username",),
+    "mail": ("email",),
+    "cn": ("first_name",),
+    "sn": ("last_name",),
+}
+ACS_DEFAULT_REDIRECT_URL = "/"
+
+SAML_DIR = env("SAML_DIR")
+
+SAML_CONFIG = {
+    "xmlsec_binary": "/usr/bin/xmlsec1",
+    "entityid": f"{SITE_URL}/{SAML_ROOT_PATH}/metadata/",
+    "attribute_map_dir": os.path.join(SAML_DIR, "attribute_maps"),
+    "service": {
+        "sp": {
+            "name": "Service Gateway",
+            "name_id_format": saml2.saml.NAMEID_FORMAT_PERSISTENT,
+            "endpoints": {
+                "assertion_consumer_service": [
+                    (f"{SITE_URL}/{SAML_ROOT_PATH}/acs/", saml2.BINDING_HTTP_POST),
+                ],
+                "single_logout_service": [
+                    (f"{SITE_URL}/{SAML_ROOT_PATH}/ls/post/", saml2.BINDING_HTTP_POST),
+                ],
+            },
+            "force_authn": False,
+            "authn_requests_signed": True,
+            "name_id_format_allow_create": False,
+            "allow_unsolicited": True,
+            "required_attributes": ["uid", "username"],
+            "optional_attributes": ["eduPersonAffiliation"],
+        },
+    },
+    "metadata": {
+        "remote": [
+            {
+                "url": f"{IDP_URL}{IDP_METADATA_PATH}",
+                "disable_ssl_certificate_validation": False,
+            },
+        ],
+    },
+    "debug": 0,
+    "key_file": os.path.join(SAML_DIR, "private.key"),
+    "cert_file": os.path.join(SAML_DIR, "public.pem"),
+    # own metadata settings
+    "contact_person": [
+        {
+            "given_name": "Nat",
+            "sur_name": "Gordon",
+            "company": "NattyG93",
+            "email_address": "webmaster@nattyg93.com",
+            "contact_type": "technical",
+        },
+    ],
+    # you can set multilanguage information here
+    "organization": {
+        "name": [("NattyG93", "en")],
+        "display_name": [("NattyG93", "en")],
+        "url": [("https://nattyg93.com", "en")],
+    },
+}
+
 
 # Security
 INTERNAL_IPS = ["127.0.0.1"]
@@ -211,8 +297,6 @@ CACHES = {
 }
 
 # DRF Core
-LOGIN_URL = "/backend/api/v1/login/"
-LOGIN_REDIRECT_URL = "/backend/api/v1/"
 INSTALLED_APPS += [
     "rest_framework",
     "rest_framework.authtoken",

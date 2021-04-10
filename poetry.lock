@@ -496,6 +496,30 @@ django-filter = ["django-filter (>=2.0)"]
 django-polymorphic = ["django-polymorphic (>=2.0)"]
 
 [[package]]
+name = "djangosaml2"
+version = "1.1.0"
+description = "pysaml2 integration for Django"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+defusedxml = ">=0.4.1"
+Django = ">=2.2,<5"
+pysaml2 = ">=6.5.1"
+
+[[package]]
+name = "elementpath"
+version = "2.2.1"
+description = "XPath 1.0/2.0 parsers and selectors for ElementTree and lxml"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+dev = ["tox", "coverage", "lxml", "xmlschema (>=1.2.3,<1.3.0)", "sphinx"]
+
+[[package]]
 name = "factory-boy"
 version = "2.12.0"
 description = "A versatile test fixtures replacement based on thoughtbot's factory_bot for Ruby."
@@ -573,6 +597,21 @@ zipp = ">=0.5"
 [package.extras]
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "packaging", "pep517", "pyfakefs", "flufl.flake8", "pytest-black (>=0.3.7)", "pytest-mypy", "importlib-resources (>=1.3)"]
+
+[[package]]
+name = "importlib-resources"
+version = "5.1.2"
+description = "Read resources from Python packages"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+zipp = {version = ">=0.4", markers = "python_version < \"3.8\""}
+
+[package.extras]
+docs = ["sphinx", "jaraco.packaging (>=8.2)", "rst.linker (>=1.9)"]
+testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "pytest-enabler", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [[package]]
 name = "inflection"
@@ -980,6 +1019,44 @@ python-versions = "*"
 pylint = ">=1.7"
 
 [[package]]
+name = "pyopenssl"
+version = "20.0.1"
+description = "Python wrapper module around the OpenSSL library"
+category = "main"
+optional = false
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*"
+
+[package.dependencies]
+cryptography = ">=3.2"
+six = ">=1.5.2"
+
+[package.extras]
+docs = ["sphinx", "sphinx-rtd-theme"]
+test = ["flaky", "pretend", "pytest (>=3.0.1)"]
+
+[[package]]
+name = "pysaml2"
+version = "6.5.1"
+description = "Python implementation of SAML Version 2 Standard"
+category = "main"
+optional = false
+python-versions = "<4,>=3.6"
+
+[package.dependencies]
+cryptography = ">=1.4"
+defusedxml = "*"
+importlib-resources = "*"
+pyOpenSSL = "*"
+python-dateutil = "*"
+pytz = "*"
+requests = ">=1.0.0"
+six = "*"
+xmlschema = "*"
+
+[package.extras]
+s2repoze = ["paste", "zope.interface", "repoze.who"]
+
+[[package]]
 name = "python-crontab"
 version = "2.5.1"
 description = "Python Crontab API"
@@ -1257,6 +1334,22 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "xmlschema"
+version = "1.5.3"
+description = "An XML Schema validator and decoder"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+elementpath = ">=2.1.2,<3.0.0"
+
+[package.extras]
+codegen = ["elementpath (>=2.1.2,<3.0.0)", "jinja2"]
+dev = ["tox", "coverage", "lxml", "elementpath (>=2.1.2,<3.0.0)", "memory-profiler", "sphinx", "sphinx-rtd-theme", "jinja2"]
+docs = ["elementpath (>=2.1.2,<3.0.0)", "sphinx", "sphinx-rtd-theme", "jinja2"]
+
+[[package]]
 name = "zipp"
 version = "3.4.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -1271,7 +1364,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "edd66de6b4f5aa28b907826d3cfe87e27f31e7dab603495bbde8cbf5ee3dbfb7"
+content-hash = "d006816511c3d0f2ddf79614faf6010ce504b01e22f2aecb17cabfe3abf73d16"
 
 [metadata.files]
 amqp = [
@@ -1475,6 +1568,14 @@ djangorestframework-jsonapi = [
     {file = "djangorestframework-jsonapi-3.2.0.tar.gz", hash = "sha256:8a438fba41c1ef477a2d6da70224e767528ed116ebc1e219c4ca850460ac7d0a"},
     {file = "djangorestframework_jsonapi-3.2.0-py2.py3-none-any.whl", hash = "sha256:213656fb5d4b336df3ca61bff766d19e926784f9a28c7cc482a7916d335cad40"},
 ]
+djangosaml2 = [
+    {file = "djangosaml2-1.1.0-py2.py3-none-any.whl", hash = "sha256:c5e8b3ab4f5b69ca9414732274489e5edeafdf0826f688eb0a7f456b4e1027be"},
+    {file = "djangosaml2-1.1.0.tar.gz", hash = "sha256:1387903bb31388723d33103637f338de32a5b2cd3a8b5117d939996cc3de94c1"},
+]
+elementpath = [
+    {file = "elementpath-2.2.1-py3-none-any.whl", hash = "sha256:5a00899c22623e0a1c1cd0f05d27cc73b77287a6d645fb6c2ee725d87b29806f"},
+    {file = "elementpath-2.2.1.tar.gz", hash = "sha256:c7b996c5624926f329f4379fbcffd5787629e08b2f8d7159d23525e9243ba637"},
+]
 factory-boy = [
     {file = "factory_boy-2.12.0-py2.py3-none-any.whl", hash = "sha256:728df59b372c9588b83153facf26d3d28947fc750e8e3c95cefa9bed0e6394ee"},
     {file = "factory_boy-2.12.0.tar.gz", hash = "sha256:faf48d608a1735f0d0a3c9cbf536d64f9132b547dae7ba452c4d99a79e84a370"},
@@ -1502,6 +1603,10 @@ idna = [
 importlib-metadata = [
     {file = "importlib_metadata-3.3.0-py3-none-any.whl", hash = "sha256:bf792d480abbd5eda85794e4afb09dd538393f7d6e6ffef6e9f03d2014cf9450"},
     {file = "importlib_metadata-3.3.0.tar.gz", hash = "sha256:5c5a2720817414a6c41f0a49993908068243ae02c1635a228126519b509c8aed"},
+]
+importlib-resources = [
+    {file = "importlib_resources-5.1.2-py3-none-any.whl", hash = "sha256:ebab3efe74d83b04d6bf5cd9a17f0c5c93e60fb60f30c90f56265fce4682a469"},
+    {file = "importlib_resources-5.1.2.tar.gz", hash = "sha256:642586fc4740bd1cad7690f836b3321309402b20b332529f25617ff18e8e1370"},
 ]
 inflection = [
     {file = "inflection-0.5.1-py2.py3-none-any.whl", hash = "sha256:f38b2b640938a4f35ade69ac3d053042959b62a0f1076a5bbaa1b9526605a8a2"},
@@ -1698,6 +1803,14 @@ pylint-plugin-utils = [
     {file = "pylint-plugin-utils-0.6.tar.gz", hash = "sha256:57625dcca20140f43731311cd8fd879318bf45a8b0fd17020717a8781714a25a"},
     {file = "pylint_plugin_utils-0.6-py3-none-any.whl", hash = "sha256:2f30510e1c46edf268d3a195b2849bd98a1b9433229bb2ba63b8d776e1fc4d0a"},
 ]
+pyopenssl = [
+    {file = "pyOpenSSL-20.0.1-py2.py3-none-any.whl", hash = "sha256:818ae18e06922c066f777a33f1fca45786d85edfe71cd043de6379337a7f274b"},
+    {file = "pyOpenSSL-20.0.1.tar.gz", hash = "sha256:4c231c759543ba02560fcd2480c48dcec4dae34c9da7d3747c508227e0624b51"},
+]
+pysaml2 = [
+    {file = "pysaml2-6.5.1-py2.py3-none-any.whl", hash = "sha256:f79d7b2a416f1b187643a459b2abc24ae049b663e4c15f0adb93b2f3245ede3e"},
+    {file = "pysaml2-6.5.1.tar.gz", hash = "sha256:6dc798aae0e2d43425cd3c720da1aea1b99e52c7e7d87d3666c8854f35e862f6"},
+]
 python-crontab = [
     {file = "python-crontab-2.5.1.tar.gz", hash = "sha256:4bbe7e720753a132ca4ca9d4094915f40e9d9dc8a807a4564007651018ce8c31"},
 ]
@@ -1878,6 +1991,10 @@ werkzeug = [
 ]
 wrapt = [
     {file = "wrapt-1.12.1.tar.gz", hash = "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"},
+]
+xmlschema = [
+    {file = "xmlschema-1.5.3-py3-none-any.whl", hash = "sha256:34e785f8ed60c07ae825c1506c8e0fc138c4f1464d67752eaef5c62893f1b453"},
+    {file = "xmlschema-1.5.3.tar.gz", hash = "sha256:a7db4c8ae2afa28654d15fcbf5d7f22f0441b5611e50426426e5418f369b5c79"},
 ]
 zipp = [
     {file = "zipp-3.4.0-py3-none-any.whl", hash = "sha256:102c24ef8f171fd729d46599845e95c7ab894a4cf45f5de11a44cc7444fb1108"},
